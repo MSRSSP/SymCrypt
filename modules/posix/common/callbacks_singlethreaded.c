@@ -11,17 +11,26 @@ PVOID
 SYMCRYPT_CALL
 SymCryptCallbackAlloc( SIZE_T nBytes )
 {
-    // aligned_alloc requires size to be integer multiple of alignment
     SIZE_T cbAllocation = (nBytes + (SYMCRYPT_ASYM_ALIGN_VALUE - 1)) & ~(SYMCRYPT_ASYM_ALIGN_VALUE - 1);
+    size_t alignment = SYMCRYPT_ASYM_ALIGN_VALUE;
+    if (alignment < sizeof(void*)) {
+	    alignment = sizeof(void*);
+    }
 
-    return aligned_alloc(SYMCRYPT_ASYM_ALIGN_VALUE, cbAllocation);
+    void *raw = malloc(cbAllocation + sizeof(void*));
+    uintptr_t raw_addr = (uintptr_t)raw + sizeof(void*);
+    uintptr_t aligned_addr = (raw_addr + alignment - 1) & ~(uintptr_t)(alignment - 1);
+
+    ((void**)aligned_addr)[-1] = raw;
+
+    return (void*)aligned_addr;
 }
 
 VOID
 SYMCRYPT_CALL
 SymCryptCallbackFree( VOID * pMem )
 {
-    free( pMem );
+    free( ((void**)pMem)[-1] );
 }
 
 SYMCRYPT_ERROR
@@ -53,3 +62,4 @@ SymCryptCallbackAcquireMutexFastInproc( PVOID pMutex ) {}
 VOID
 SYMCRYPT_CALL
 SymCryptCallbackReleaseMutexFastInproc( PVOID pMutex ) {}
+

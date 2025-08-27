@@ -43,10 +43,6 @@ SymCryptInitEnvOpteeTa( UINT32 version )
     //
     g_SymCryptCpuFeaturesNotPresent &= ~SYMCRYPT_CPU_FEATURE_SAVEXMM_NOFAIL;
 
-#else
-    
-    #error We only support ARM64 and AMD64 for OPTEE environment
-
 #endif
 
     SymCryptInitEnvCommon( version );

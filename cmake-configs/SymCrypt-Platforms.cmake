@@ -108,7 +108,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux|Darwin")
             endif()
 
             # OPTEE env has a different stdlib
-            add_compile_options(-nostdinc -isystem ${TOOLCHAIN_INCLUDE})
+            add_compile_options(-isystem ${TOOLCHAIN_INCLUDE})
             include_directories(${TA_DEV_KIT_INC})
         else()
             message(FATAL_ERROR "TA_DEV_KIT_INC must be defined for OPTEE build")
