@@ -1096,13 +1096,6 @@ SymCryptRsaPkcs1Sign(
     pbOID = pHashOIDs ? pHashOIDs->pbOID : NULL;
     cbOID = pHashOIDs ? pHashOIDs->cbOID : 0;
 
-    // Make sure that the key may be used in Sign/Verify
-    if ( (pkRsakey->fAlgorithmInfo & SYMCRYPT_FLAG_RSAKEY_SIGN) == 0 )
-    {
-        scError = SYMCRYPT_INVALID_ARGUMENT;
-        goto cleanup;
-    }
-
     // Make sure that the key has a private key
     if (!pkRsakey->hasPrivateKey)
     {
